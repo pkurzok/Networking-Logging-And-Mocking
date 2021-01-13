@@ -12,17 +12,21 @@ protocol SampleServiceProtocol {
 }
 
 struct SampleService: SampleServiceProtocol {
+    var urlSession: URLSession
+    
+    init(urlSession: URLSession = URLSession.shared) {
+        self.urlSession = urlSession
+    }
         
     func getSomething() {
         if let url = URL(string: "https://jsonplaceholder.typicode.com/posts") {
-           
-            URLSession.shared.dataTask(with: url) { data, response, error in
-                 if let data = data {
+            urlSession.dataTask(with: url) { data, _, _ in
+                if let data = data {
                     if let jsonString = String(data: data, encoding: .utf8) {
-                       print(jsonString)
+                        print(jsonString)
                     }
-                  }
-              }.resume()
+                }
+            }.resume()
         }
     }
 }
