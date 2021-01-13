@@ -16,6 +16,8 @@ struct ContentViewModel {
     }
     
     func fetchData() {
-        service.getSomething()
+        service.getSomething { results in
+            print("Got \(results.count) results")
+        }
     }
 }
