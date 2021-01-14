@@ -11,15 +11,22 @@ class LoggingProtocol: URLProtocol {
     override class func canInit(with request: URLRequest) -> Bool {
         print("URL:\t\(request.url?.absoluteString ?? "")")
         print("Method:\t\(request.httpMethod ?? "")")
-        print("Headers:")
-        request.allHTTPHeaderFields?.forEach { key, value in
-            print("\t\(key) : \(value)")
+        
+        if let headers = request.allHTTPHeaderFields, headers.count > 0 {
+            print("Headers:")
+            headers.forEach { key, value in
+                print("\t\(key) : \(value)")
+            }            
+        } else {
+            print("Headers:\tNONE")
         }
         
         if let bodyData = request.httpBody,
            let bodyString = String(data: bodyData, encoding: .utf8)
         {
             print("Body:\t\(bodyString)")
+        } else {
+            print("Body:\t- EMPTY -")
         }
                 
         //

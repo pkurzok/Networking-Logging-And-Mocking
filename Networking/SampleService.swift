@@ -19,7 +19,7 @@ struct SampleService: SampleServiceProtocol {
     }
 
     func getSomething(completion: @escaping (_ results: [SampleModel]) -> Void) {
-        if let url = URL(string: "https://jsonplaceholder.typicode.com/posts") {
+        if let url = URL(string: "https://jsonplaceholder.typicode.com/users") {
             urlSession.dataTask(with: url) { data, _, _ in
                 handleResponseData(data: data, completion: completion)
             }.resume()
