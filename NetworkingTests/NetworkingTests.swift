@@ -9,7 +9,7 @@
 import XCTest
 
 class NetworkingTests: XCTestCase {
-    func testExample() throws {
+    func testService() {
         // Set up a configuration to use our mock
         let config = URLSessionConfiguration.ephemeral
         config.protocolClasses = [URLProtocolMock.self]
@@ -20,13 +20,41 @@ class NetworkingTests: XCTestCase {
         // Create SampleService and inject the session with the mocked protocol
         let sampleService = SampleService(urlSession: session)
         
-        sampleService.getSomething { (results) in
+        let expectation = self.expectation(description: "AsyncCall")
+        
+        sampleService.getSomething { results in
             
             XCTAssertNotNil(results)
-            XCTAssertEqual(100, results.count)
+            XCTAssertEqual(10, results.count)
             
-            XCTAssertEqual(1, results.first?.id)
-            XCTAssertEqual(100, results.last?.id)
+            XCTAssertEqual("Leanne Graham", results.first?.name)
+            XCTAssertEqual("Rey.Padberg@karina.biz", results.last?.email)
+            
+            expectation.fulfill()
         }
+        
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+    
+    func testLogging() {
+        let config = URLSessionConfiguration.default
+        config.protocolClasses?.insert(LoggingProtocol.self, at: 0)
+        let session = URLSession(configuration: config)
+        
+        let expectation = self.expectation(description: "AsyncCall")
+        
+        let sampleService = SampleService(urlSession: session)
+        sampleService.getSomething { results in
+            
+            XCTAssertNotNil(results)
+            XCTAssertEqual(10, results.count)
+            
+            XCTAssertEqual("Leanne Graham", results.first?.name)
+            XCTAssertEqual("Rey.Padberg@karina.biz", results.last?.email)
+            
+            expectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5, handler: nil)
     }
 }

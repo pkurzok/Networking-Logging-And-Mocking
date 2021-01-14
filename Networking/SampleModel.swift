@@ -8,8 +8,7 @@
 import Foundation
 
 struct SampleModel: Codable {
-    var userId: Int
+    var name: String
     var id: Int
-    var title: String
-    var body: String
+    var email: String
 }
