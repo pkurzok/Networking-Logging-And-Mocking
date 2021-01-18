@@ -1,18 +1,11 @@
 //
-//  NetworkingExtension.swift
+//  WhispersRequest.swift
 //  Networking
 //
 //  Created by Peter Kurzok on 18.01.21.
 //
 
 import Foundation
-
-extension URLRequest {
-    
-    internal var whispersRequest: WhispersRequest {
-        WhispersRequest(url: url, method: httpMethod, headers: allHTTPHeaderFields, body: httpBody)
-    }
-}
 
 struct WhispersRequest: Codable {
     let url: URL?
