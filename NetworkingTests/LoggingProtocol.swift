@@ -7,14 +7,18 @@
 
 import Foundation
 
+let kWhispersServiceHeader = "WhispersMethod"
+
 class LoggingProtocol: URLProtocol {
     override class func canInit(with request: URLRequest) -> Bool {
+        
+        guard let title = request.allHTTPHeaderFields?[kWhispersServiceHeader] else { return false }
         
         let whispersRq = request.whispersRequest
         
         whispersRq.log()
         
-        PersistenceHelper().persist(request: whispersRq, title: "SampleRequest")
+        PersistenceHelper().persist(request: whispersRq, title: title)
            
         // By returning `false`, this URLProtocol will do nothing less than logging.
         return false
@@ -24,6 +28,11 @@ class LoggingProtocol: URLProtocol {
 struct PersistenceHelper {
     
     private let encoder = JSONEncoder()
+    
+    func requestWith(title: String, withExtension: String = "json") -> WhispersRequest {
+        let rq: WhispersRequest = Bundle.main.decode(title, withExtension: withExtension)
+        return rq
+    }
     
     func persist(request: WhispersRequest, title: String, fileManager: FileManager = .default) {
         

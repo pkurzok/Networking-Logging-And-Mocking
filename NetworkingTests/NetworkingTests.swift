@@ -81,4 +81,50 @@ class NetworkingTests: XCTestCase {
         
         waitForExpectations(timeout: 5, handler: nil)
     }
+    
+    func testNewAfService() {
+        
+        let config = URLSessionConfiguration.default
+        config.protocolClasses?.insert(TestingProtocol.self, at: 0)
+                
+        let session = Session(configuration: config)
+        let expectation = self.expectation(description: "AsyncCall")
+        
+        let sampleService = NewAFService(session: session)
+        sampleService.getSomething { results in
+            
+            XCTAssertNotNil(results)
+            XCTAssertEqual(10, results.count)
+            
+            XCTAssertEqual("Leanne Graham", results.first?.name)
+            XCTAssertEqual("Rey.Padberg@karina.biz", results.last?.email)
+            
+            expectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5, handler: nil)
+    }
+    
+    func testNewUrlSessionSerice() {
+        
+        let config = URLSessionConfiguration.default
+        config.protocolClasses?.insert(TestingProtocol.self, at: 0)
+                
+        let session = URLSession(configuration: config)
+        let expectation = self.expectation(description: "AsyncCall")
+        
+        let sampleService = NewSampleService(urlSession: session)
+        sampleService.getSomething { results in
+            
+            XCTAssertNotNil(results)
+            XCTAssertEqual(10, results.count)
+            
+            XCTAssertEqual("Leanne Graham", results.first?.name)
+            XCTAssertEqual("Rey.Padberg@karina.biz", results.last?.email)
+            
+            expectation.fulfill()
+        }
+        
+        waitForExpectations(timeout: 5, handler: nil)        
+    }
 }
